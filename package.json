@@ -1,5 +1,5 @@
 {
-  "name": "toastificvue3",
+  "name": "vue-toastfic",
   "private": false,
   "version": "0.0.0",
   "type": "module",
@@ -9,22 +9,27 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/MatijaNovosel/tri-state-checkbox.git"
+    "url": "https://github.com/paulopariz/ToastficVue.git"
   },
   "keywords": [
-    "toast",
-    "notification",
     "vue3",
     "vue",
-    "vuejs"
+    "vuejs",
+    "toast",
+    "toastify",
+    "notification",
+    "toast-notification",
+    "vue-notification",
+    "alert",
+    "toast-message"
   ],
-  "main": "./dist/vue-tri-state-checkbox.umd.cjs",
-  "module": "./dist/vue-tri-state-checkbox.js",
+  "main": "./dist/vue-toastfic.umd.cjs",
+  "module": "./dist/vue-toastfic.js",
   "types": "./dist/index.d.ts",
   "exports": {
     ".": {
-      "import": "./dist/vue-tri-state-checkbox.js",
-      "require": "./dist/vue-tri-state-checkbox.umd.cjs"
+      "import": "./dist/vue-toastfic.js",
+      "require": "./dist/vue-toastfic.umd.cjs"
     },
     "./dist/style.css": {
       "import": "./dist/style.css",

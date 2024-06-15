@@ -8,8 +8,8 @@ export default defineConfig({
   build: {
     lib: {
       entry: path.resolve(__dirname, "src/index.ts"),
-      name: "TriStateCheckbox",
-      fileName: "vue-tri-state-checkbox",
+      name: "ToastficVue",
+      fileName: "vue-toastfic",
     },
     rollupOptions: {
       external: ["vue"],
