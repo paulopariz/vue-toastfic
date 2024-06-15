@@ -1,0 +1,53 @@
+{
+  "name": "toastificvue",
+  "private": false,
+  "version": "0.0.0",
+  "type": "module",
+  "files": [
+    "dist",
+    "src/components/"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MatijaNovosel/tri-state-checkbox.git"
+  },
+  "keywords": [
+    "toast",
+    "notification",
+    "vue3",
+    "vue",
+    "vuejs"
+  ],
+  "main": "./dist/vue-tri-state-checkbox.umd.cjs",
+  "module": "./dist/vue-tri-state-checkbox.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/vue-tri-state-checkbox.js",
+      "require": "./dist/vue-tri-state-checkbox.umd.cjs"
+    },
+    "./dist/style.css": {
+      "import": "./dist/style.css",
+      "require": "./dist/style.css"
+    }
+  },
+  "peerDependencies": {
+    "vue": "^3.0.0"
+  },
+  "scripts": {
+    "dev": "vite",
+    "build": "vue-tsc && vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@types/node": "^20.14.2",
+    "vue": "^3.4.21"
+  },
+  "devDependencies": {
+    "vite-plugin-dts": "^3.9.1",
+    "@vitejs/plugin-vue": "^5.0.4",
+    "typescript": "^5.2.2",
+    "vite": "^5.2.0",
+    "vue-tsc": "^2.0.6"
+  }
+}
