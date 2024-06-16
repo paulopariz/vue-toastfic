@@ -2,22 +2,22 @@
 import { Toast, useToast } from "./components/toast";
 
 function success() {
-  useToast.success("Success", {
+  useToast.success("Cadastro realizado!", {
     description: "Descrição do toast de Success",
   });
 }
 function error() {
-  useToast.error("Error", {
+  useToast.error("Ocorreu um erro", {
     description: "Descrição do toast de Error",
   });
 }
 function info() {
-  useToast.info("Info", {
+  useToast.info("Aguarde 1 minuto", {
     description: "Descrição do toast de Info",
   });
 }
 function warning() {
-  useToast.warning("Warning", {
+  useToast.warning("Ultímas chances!", {
     description: "Descrição do toast de Warning",
   });
 }
@@ -43,7 +43,7 @@ function warning() {
     <br />
   </div>
 
-  <Toast :duration="3000" />
+  <Toast :automatic-close="false" position="top-center" />
 </template>
 
 <style scoped>

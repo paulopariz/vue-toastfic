@@ -1,8 +1,10 @@
 <script lang="ts" setup>
-import { Success, Error, Info, Warning, Close } from "./icons";
+import { Success, Error, Info, Warning } from "./icons";
+import { ToastTitle } from "./index";
+
 import { useToasts } from "./toast";
 import { IProps } from "./props";
-import { onBeforeUnmount, watchEffect } from "vue";
+import { watchEffect, onBeforeUnmount } from "vue";
 
 const { toasts, removeToast } = useToasts();
 
@@ -22,6 +24,7 @@ function closeAutoToasts() {
     if (!activeTimeouts.has(toast.id)) {
       const toastDuration = toast.duration ?? props.duration;
       const timeout = setTimeout(() => {
+        removeToast(toast.id);
         activeTimeouts.delete(toast.id);
       }, toastDuration);
 
@@ -40,14 +43,9 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-  <div class="toast-container" :class="`toast-postion-${position}`">
-    <transition-group name="toast-transition">
-      <div
-        v-for="toast in toasts"
-        :id="'toast-' + toast.id"
-        :key="toast.id"
-        :class="['gr-toast', `gr-toast-${toast.type}`]"
-      >
+  <div class="toast-container" :class="`toast-position-${position}`">
+    <transition-group name="fade">
+      <div v-for="toast in toasts" :key="toast.id" :class="['gr-toast', `gr-toast-${toast.type}`]">
         <div v-if="toast.type !== 'default'" class="icon">
           <Success v-if="toast.type === 'success'" />
           <Error v-if="toast.type === 'error'" />
@@ -55,16 +53,13 @@ onBeforeUnmount(() => {
           <Warning v-if="toast.type === 'warning'" />
         </div>
 
-        <button v-if="props.close" @click.stop="removeToast(toast.id)">
+        <!-- <button v-if="props.close" @click.stop="removeToast(toast.id)">
           <Close />
-        </button>
+        </button> -->
 
-        <section>
-          <p>
-            {{ toast.title }}
-          </p>
-          <span v-if="toast.description">{{ toast.description }}</span>
-        </section>
+        <ToastTitle>
+          {{ toast.title }}
+        </ToastTitle>
       </div>
     </transition-group>
   </div>
@@ -73,61 +68,69 @@ onBeforeUnmount(() => {
 <style scoped>
 .toast-container {
   position: fixed;
-
+  overflow: hidden;
   z-index: 9999;
 
   max-height: 50%;
-  overflow: hidden;
+
   display: flex;
   flex-direction: column;
   gap: 10px;
 }
 
-.toast-postion-top-right {
+.toast-position-top-right {
   top: 10px;
   right: 10px;
 }
 
-.toast-postion-top-left {
+.toast-position-top-left {
   top: 10px;
   left: 10px;
 }
 
-.toast-postion-bottom-right {
+.toast-position-bottom-right {
   bottom: 10px;
   right: 10px;
 }
 
-.toast-postion-bottom-left {
+.toast-position-bottom-left {
   bottom: 10px;
   left: 10px;
 }
 
-.toast-postion-bottom-center {
+.toast-position-bottom-center {
   bottom: 10px;
   left: 50%;
   transform: translateX(-50%);
 }
 
-.toast-postion-top-center {
+.toast-position-top-center {
   top: 10px;
   left: 50%;
   transform: translateX(-50%);
 }
 
 .gr-toast {
-  padding: 4px;
-  border-radius: 20px;
-  color: #ffffff;
-  background-color: #1a1a1a;
+  border-radius: 10px;
+
+  color: #1a1a1a;
+  background-color: #fff;
   box-shadow: 3px 3px 12px rgba(53, 53, 53, 0.055) !important;
-  width: 290px;
+
+  min-height: 38px;
+
   display: flex;
-  align-items: start;
-  gap: 3px;
+  align-items: center;
+  gap: 8px;
+
+  padding: 0 13px 0 10px;
+
   user-select: none;
   animation: show-toast 0.2s backwards;
+
   position: relative;
+
+  overflow: hidden;
 }
 
 .gr-toast-success {
@@ -151,18 +154,16 @@ onBeforeUnmount(() => {
 }
 
 .icon {
-  width: 28px;
-  height: 28px;
-  border-radius: 999px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
   animation: show-icon 0.7s both;
 }
 
 .icon svg {
   height: 20px;
   width: 20px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 button {
@@ -194,7 +195,6 @@ span {
   line-height: 18px;
 }
 
-/* Animação de entrada para os toasts */
 @keyframes show-toast {
   0% {
     opacity: 0;
@@ -220,31 +220,13 @@ span {
   }
 }
 
-/* Animação de saída para os toasts */
-/* .toast-transition-leave-active,
-.toast-transition-enter-active {
-  transition: all 0.5s;
-}
-
-.toast-transition-enter-from,
-.toast-transition-leave-to {
-  transform: translateY(-80px);
-  overflow: hidden;
-} */
-
-.fade-out {
+.fade-leave-active {
   transition: all 0.3s;
 }
+.fade-leave-to {
+  height: 0;
+  opacity: 0.5;
 
-/* Estilo da animação de ícone */
-@keyframes fade-out {
-  0% {
-    opacity: 1;
-    transform: translateY(0);
-  }
-  100% {
-    opacity: 0;
-    transform: translateY(-20px);
-  }
+  transform: translateY(-100%);
 }
 </style>

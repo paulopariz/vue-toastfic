@@ -1,25 +1,11 @@
 import { ref } from "vue";
+import { IToastOptions, IToast, IToastType } from "./props";
 
-export type ToastType = "success" | "error" | "info" | "warning" | "default";
-
-export interface ToastOptions {
-  duration?: number;
-  description?: string;
-}
-
-interface Toast {
-  id: number;
-  title: string;
-  type: ToastType;
-  duration?: number;
-  description?: string;
-}
-
-const toasts = ref<Toast[]>([]);
+const toasts = ref<IToast[]>([]);
 
 let toastId = 0;
 
-export function addToast(title: string, type: ToastType = "info", options: ToastOptions = {}) {
+export function addToast(title: string, type: IToastType = "info", options: IToastOptions = {}) {
   const { duration, description } = options;
   toasts.value.push({ id: toastId++, title, type, duration, description });
 }
