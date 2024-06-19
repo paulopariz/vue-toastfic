@@ -8,3 +8,10 @@
 body {
   background-color: #111111;
 }
+
+button {
+  outline: none;
+  background-color: transparent;
+  cursor: pointer;
+  border: none;
+}

@@ -1,10 +1,9 @@
 <script lang="ts" setup>
-import { Success, Error, Info, Warning } from "./icons";
-import { ToastTitle } from "./index";
+import { ToastTitle, ToastIcon } from "./index";
 
 import { useToasts } from "./toast";
 import { IProps } from "./props";
-import { watchEffect, onBeforeUnmount } from "vue";
+import { watchEffect, onBeforeUnmount, provide, ref } from "vue";
 
 const { toasts, removeToast } = useToasts();
 
@@ -13,6 +12,7 @@ const props = withDefaults(defineProps<IProps>(), {
   duration: 3000,
   automaticClose: true,
   position: "top-right",
+  colorful: true,
 });
 
 const activeTimeouts = new Map<number, ReturnType<typeof setTimeout>>();
@@ -40,18 +40,15 @@ watchEffect(() => {
 onBeforeUnmount(() => {
   activeTimeouts.forEach((timeout) => clearTimeout(timeout));
 });
+
+provide("colorful", ref(props.colorful));
 </script>
 
 <template>
   <div class="toast-container" :class="`toast-position-${position}`">
     <transition-group name="fade">
-      <div v-for="toast in toasts" :key="toast.id" :class="['gr-toast', `gr-toast-${toast.type}`]">
-        <div v-if="toast.type !== 'default'" class="icon">
-          <Success v-if="toast.type === 'success'" />
-          <Error v-if="toast.type === 'error'" />
-          <Info v-if="toast.type === 'info'" />
-          <Warning v-if="toast.type === 'warning'" />
-        </div>
+      <div v-for="toast in toasts" :key="toast.id" class="gr-toast">
+        <ToastIcon v-if="toast.type !== 'default'" :type="toast.type" />
 
         <!-- <button v-if="props.close" @click.stop="removeToast(toast.id)">
           <Close />
@@ -60,6 +57,8 @@ onBeforeUnmount(() => {
         <ToastTitle>
           {{ toast.title }}
         </ToastTitle>
+
+        <span class="action">Action</span>
       </div>
     </transition-group>
   </div>
@@ -121,6 +120,7 @@ onBeforeUnmount(() => {
 
   display: flex;
   align-items: center;
+  justify-content: space-between;
   gap: 8px;
 
   padding: 0 13px 0 10px;
@@ -133,50 +133,22 @@ onBeforeUnmount(() => {
   overflow: hidden;
 }
 
-.gr-toast-success {
-  .icon {
-  }
-}
+.action {
+  margin-left: 90px;
+  font-weight: 600;
 
-.gr-toast-error {
-  .icon {
-  }
-}
-
-.gr-toast-info {
-  .icon {
-  }
-}
-
-.gr-toast-warning {
-  .icon {
-  }
-}
-
-.icon {
-  animation: show-icon 0.7s both;
-}
-
-.icon svg {
-  height: 20px;
-  width: 20px;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  cursor: pointer;
+  text-decoration-line: underline;
 }
 
 button {
-  outline: none;
   width: 20px;
   height: 20px;
   border-radius: 999px;
-  border: none;
   background-color: transparent;
   display: flex;
   align-items: center;
   justify-content: center;
-  cursor: pointer;
   position: absolute;
   right: 10px;
   top: 10px;
@@ -203,20 +175,6 @@ span {
   100% {
     opacity: 1;
     transform: translateY(0) scale(1);
-  }
-}
-
-@keyframes show-icon {
-  0% {
-    opacity: 0;
-    transform: scale(0.7);
-  }
-  50% {
-    transform: scale(1.3);
-  }
-  100% {
-    opacity: 1;
-    transform: scale(1);
   }
 }
 

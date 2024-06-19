@@ -29,16 +29,16 @@ function warning() {
       <img src="/vite.svg" class="logo" alt="Vite logo" />
     </a>
 
-    <button @click="success">success</button>
+    <button style="color: aliceblue" @click="success">success</button>
     <br />
     <br />
-    <button @click="error">error</button>
+    <button style="color: aliceblue" @click="error">error</button>
     <br />
     <br />
-    <button @click="info">info</button>
+    <button style="color: aliceblue" @click="info">info</button>
     <br />
     <br />
-    <button @click="warning">warning</button>
+    <button style="color: aliceblue" @click="warning">warning</button>
     <br />
     <br />
   </div>
