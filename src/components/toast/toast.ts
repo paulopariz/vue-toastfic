@@ -6,8 +6,8 @@ const toasts = ref<IToast[]>([]);
 let toastId = 0;
 
 export function addToast(title: string, type: IToastType = "info", options: IToastOptions = {}) {
-  const { duration, description } = options;
-  toasts.value.push({ id: toastId++, title, type, duration, description });
+  const { duration, description, handle } = options;
+  toasts.value.push({ id: toastId++, title, type, duration, description, handle });
 }
 
 export function removeToast(id: number) {

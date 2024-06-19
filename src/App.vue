@@ -19,6 +19,10 @@ function info() {
 function warning() {
   useToast.warning("Ultímas chances!", {
     description: "Descrição do toast de Warning",
+    handle: {
+      text: "OK",
+      click: () => console.log("e"),
+    },
   });
 }
 </script>

@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { ToastTitle, ToastIcon } from "./index";
+import { ToastTitle, ToastIcon, ToastAction } from "./index";
 
 import { useToasts } from "./toast";
 import { IProps } from "./props";
@@ -45,9 +45,9 @@ provide("colorful", ref(props.colorful));
 </script>
 
 <template>
-  <div class="toast-container" :class="`toast-position-${position}`">
-    <transition-group name="fade">
-      <div v-for="toast in toasts" :key="toast.id" class="gr-toast">
+  <div class="toastific-container" :class="`toastific-position-${position}`">
+    <transition-group name="toastific">
+      <div v-for="toast in toasts" :key="toast.id" class="toastific">
         <ToastIcon v-if="toast.type !== 'default'" :type="toast.type" />
 
         <!-- <button v-if="props.close" @click.stop="removeToast(toast.id)">
@@ -58,14 +58,14 @@ provide("colorful", ref(props.colorful));
           {{ toast.title }}
         </ToastTitle>
 
-        <span class="action">Action</span>
+        <ToastAction @click="toast.handle?.click">{{ toast.handle?.text }}</ToastAction>
       </div>
     </transition-group>
   </div>
 </template>
 
 <style scoped>
-.toast-container {
+.toastific-container {
   position: fixed;
   overflow: hidden;
   z-index: 9999;
@@ -77,39 +77,39 @@ provide("colorful", ref(props.colorful));
   gap: 10px;
 }
 
-.toast-position-top-right {
+.toastific-position-top-right {
   top: 10px;
   right: 10px;
 }
 
-.toast-position-top-left {
+.toastific-position-top-left {
   top: 10px;
   left: 10px;
 }
 
-.toast-position-bottom-right {
+.toastific-position-bottom-right {
   bottom: 10px;
   right: 10px;
 }
 
-.toast-position-bottom-left {
+.toastific-position-bottom-left {
   bottom: 10px;
   left: 10px;
 }
 
-.toast-position-bottom-center {
+.toastific-position-bottom-center {
   bottom: 10px;
   left: 50%;
   transform: translateX(-50%);
 }
 
-.toast-position-top-center {
+.toastific-position-top-center {
   top: 10px;
   left: 50%;
   transform: translateX(-50%);
 }
 
-.gr-toast {
+.toastific {
   border-radius: 10px;
 
   color: #1a1a1a;
@@ -126,48 +126,15 @@ provide("colorful", ref(props.colorful));
   padding: 0 13px 0 10px;
 
   user-select: none;
-  animation: show-toast 0.2s backwards;
+
+  animation: show-toastific 0.2s backwards;
 
   position: relative;
 
   overflow: hidden;
 }
 
-.action {
-  margin-left: 90px;
-  font-weight: 600;
-
-  cursor: pointer;
-  text-decoration-line: underline;
-}
-
-button {
-  width: 20px;
-  height: 20px;
-  border-radius: 999px;
-  background-color: transparent;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: absolute;
-  right: 10px;
-  top: 10px;
-}
-
-section {
-  width: 150px;
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-  overflow-wrap: break-word;
-}
-
-span {
-  font-size: 12px;
-  line-height: 18px;
-}
-
-@keyframes show-toast {
+@keyframes show-toastific {
   0% {
     opacity: 0;
     transform: translateY(-50px) scale(0.8);
@@ -178,10 +145,10 @@ span {
   }
 }
 
-.fade-leave-active {
+.toastific-leave-active {
   transition: all 0.3s;
 }
-.fade-leave-to {
+.toastific-leave-to {
   height: 0;
   opacity: 0.5;
 

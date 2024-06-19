@@ -11,11 +11,20 @@ export type IToastType = "success" | "error" | "info" | "warning" | "default";
 export interface IToastOptions {
   duration?: number;
   description?: string;
+  handle?: {
+    text: string;
+    click: () => void;
+  };
 }
+
 export interface IToast {
   id: number;
   title: string;
   type: IToastType;
   duration?: number;
   description?: string;
+  handle?: {
+    text: string;
+    click: () => void;
+  };
 }
