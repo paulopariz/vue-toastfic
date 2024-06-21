@@ -7,7 +7,7 @@ let toastId = 0;
 
 export function addToast(title: string, type: IToastType = "info", options: IToastOptions = {}) {
   const { duration, description, handle } = options;
-  toasts.value.push({ id: toastId++, title, type, duration, description, handle });
+  toasts.value.unshift({ id: toastId++, title, type, duration, description, handle });
 }
 
 export function removeToast(id: number) {

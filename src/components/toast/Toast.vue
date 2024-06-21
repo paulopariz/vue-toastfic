@@ -33,6 +33,13 @@ function closeAutoToasts() {
   });
 }
 
+function handleToast(action?: () => void, id?: number) {
+  if (action && id !== undefined) {
+    action();
+    removeToast(id);
+  }
+}
+
 watchEffect(() => {
   closeAutoToasts();
 });
@@ -50,15 +57,11 @@ provide("colorful", ref(props.colorful));
       <div v-for="toast in toasts" :key="toast.id" class="toastific">
         <ToastIcon v-if="toast.type !== 'default'" :type="toast.type" />
 
-        <!-- <button v-if="props.close" @click.stop="removeToast(toast.id)">
-          <Close />
-        </button> -->
-
         <ToastTitle>
           {{ toast.title }}
         </ToastTitle>
 
-        <ToastAction @click="toast.handle?.click">{{ toast.handle?.text }}</ToastAction>
+        <ToastAction @click="handleToast(toast.handle?.click, toast.id)">{{ toast.handle?.text }}</ToastAction>
       </div>
     </transition-group>
   </div>
@@ -70,11 +73,15 @@ provide("colorful", ref(props.colorful));
   overflow: hidden;
   z-index: 9999;
 
+  overflow-y: auto;
   max-height: 50%;
 
-  display: flex;
-  flex-direction: column;
+  display: grid;
   gap: 10px;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
 }
 
 .toastific-position-top-right {
@@ -112,11 +119,11 @@ provide("colorful", ref(props.colorful));
 .toastific {
   border-radius: 10px;
 
+  height: 38px;
+
   color: #1a1a1a;
   background-color: #fff;
   box-shadow: 3px 3px 12px rgba(53, 53, 53, 0.055) !important;
-
-  min-height: 38px;
 
   display: flex;
   align-items: center;
@@ -130,28 +137,32 @@ provide("colorful", ref(props.colorful));
   animation: show-toastific 0.2s backwards;
 
   position: relative;
-
   overflow: hidden;
 }
 
 @keyframes show-toastific {
   0% {
     opacity: 0;
-    transform: translateY(-50px) scale(0.8);
   }
   100% {
     opacity: 1;
-    transform: translateY(0) scale(1);
   }
 }
 
+.toastific-enter-active,
 .toastific-leave-active {
-  transition: all 0.3s;
+  transition: all 0.3s ease;
 }
-.toastific-leave-to {
-  height: 0;
-  opacity: 0.5;
 
-  transform: translateY(-100%);
+.toastific-enter-from,
+.toastific-leave-to {
+  opacity: 0;
+  height: 0;
+}
+
+.toastific-enter-to,
+.toastific-leave-from {
+  opacity: 1;
+  height: 38px;
 }
 </style>
