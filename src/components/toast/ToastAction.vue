@@ -3,17 +3,16 @@ const emit = defineEmits(["click"]);
 </script>
 
 <template>
-  <span class="action-toastific" @click="emit('click')">
+  <span class="toastific-action" @click="emit('click')">
     <slot />
   </span>
 </template>
 
 <style scoped>
-.action-toastific {
-  margin-left: 90px;
-
+.toastific-action {
   font-weight: 600;
   font-size: 12px;
+  color: var(--toastfic-text);
 
   cursor: pointer;
   text-decoration-line: underline;

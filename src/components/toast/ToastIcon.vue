@@ -6,6 +6,8 @@ interface IToastIconProps {
   type: "success" | "error" | "info" | "warning";
 }
 
+type TTheme = "light" | "dark" | "pastel";
+
 const props = defineProps<IToastIconProps>();
 
 const iconComponents = {
@@ -15,15 +17,23 @@ const iconComponents = {
   warning: Warning,
 };
 
-const colorful = inject<boolean>("colorful");
+const isIconColor = inject<boolean>("isIconColor");
+const theme = inject<TTheme>("currentTheme");
 
-if (!colorful) {
-  throw new Error("colorful not provided");
+if (!isIconColor) {
+  throw new Error("isIconColor not provided");
+}
+if (!theme) {
+  throw new Error("theme not provided");
 }
 </script>
 
 <template>
-  <component :is="iconComponents[props.type]" class="icon" :class="{ [`icon-${$props.type}`]: colorful }" />
+  <component
+    :is="iconComponents[props.type]"
+    class="icon"
+    :class="{ [`icon-${$props.type}`]: isIconColor || theme === 'pastel' }"
+  />
 </template>
 
 <style scoped>
@@ -33,23 +43,23 @@ if (!colorful) {
   height: 22px;
   width: 22px;
 
-  fill: #1a1a1a;
+  fill: var(--toastfic-icon);
   display: flex;
   align-items: center;
   justify-content: center;
+}
 
-  &.icon-success {
-    fill: #33cc33;
-  }
-  &.icon-error {
-    fill: #ff3333;
-  }
-  &.icon-info {
-    fill: #3385ff;
-  }
-  &.icon-warning {
-    fill: #ff9900;
-  }
+.icon-success {
+  fill: var(--toastfic-success-icon);
+}
+.icon-error {
+  fill: var(--toastfic-error-icon);
+}
+.icon-info {
+  fill: var(--toastfic-info-icon);
+}
+.icon-warning {
+  fill: var(--toastfic-warning-icon);
 }
 
 @keyframes show-icon {

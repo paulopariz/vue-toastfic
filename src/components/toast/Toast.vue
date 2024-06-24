@@ -3,24 +3,32 @@ import { ToastTitle, ToastIcon, ToastAction } from "./index";
 
 import { useToasts } from "./toast";
 import { IProps } from "./props";
-import { watchEffect, onBeforeUnmount, provide, ref } from "vue";
+import { watchEffect, onBeforeUnmount, provide, ref, computed } from "vue";
 
 const { toasts, removeToast } = useToasts();
 
 const props = withDefaults(defineProps<IProps>(), {
   close: true,
-  duration: 3000,
+  duration: 4000,
   automaticClose: true,
   position: "top-right",
-  colorful: true,
+  colorIcon: true,
+  maxToasts: 7,
+  theme: "light",
 });
 
-const activeTimeouts = new Map<number, ReturnType<typeof setTimeout>>();
+//limite de toasts a serem exibidos
+const activeToasts = computed(() => toasts.value.slice(0, props.maxToasts));
 
+const activeTimeouts = new Map<number, ReturnType<typeof setTimeout>>();
 function closeAutoToasts() {
   if (!props.automaticClose) return;
 
   toasts.value.forEach((toast) => {
+    // se existir evento handle o toast não irá fechar automaticamente
+    if (toast.handle?.click) return;
+
+    //fecha o toast automaticamente, com a duration das options ou da props
     if (!activeTimeouts.has(toast.id)) {
       const toastDuration = toast.duration ?? props.duration;
       const timeout = setTimeout(() => {
@@ -33,6 +41,7 @@ function closeAutoToasts() {
   });
 }
 
+//executa o evento handle das options
 function handleToast(action?: () => void, id?: number) {
   if (action && id !== undefined) {
     action();
@@ -48,81 +57,41 @@ onBeforeUnmount(() => {
   activeTimeouts.forEach((timeout) => clearTimeout(timeout));
 });
 
-provide("colorful", ref(props.colorful));
+provide("isIconColor", ref(props.colorIcon));
+provide("currentTheme", ref(props.theme));
 </script>
 
 <template>
-  <div class="toastific-container" :class="`toastific-position-${position}`">
-    <transition-group name="toastific">
-      <div v-for="toast in toasts" :key="toast.id" class="toastific">
+  <transition-group name="toastfic">
+    <div
+      v-for="(toast, index) in activeToasts"
+      :key="toast.id"
+      :class="[`toastfic-position-${position}`, { [`toastfic-${toast.type}`]: theme === 'pastel' }]"
+      :style="{ top: `${index * 48}px` }"
+      class="toastfic"
+      :toastfic-theme="theme"
+    >
+      <div class="toastfic-header">
         <ToastIcon v-if="toast.type !== 'default'" :type="toast.type" />
 
         <ToastTitle>
           {{ toast.title }}
         </ToastTitle>
-
-        <ToastAction @click="handleToast(toast.handle?.click, toast.id)">{{ toast.handle?.text }}</ToastAction>
       </div>
-    </transition-group>
-  </div>
+
+      <ToastAction @click="handleToast(toast.handle?.click, toast.id)">{{ toast.handle?.text }}</ToastAction>
+    </div>
+  </transition-group>
 </template>
 
 <style scoped>
-.toastific-container {
-  position: fixed;
-  overflow: hidden;
-  z-index: 9999;
-
-  overflow-y: auto;
-  max-height: 50%;
-
-  display: grid;
-  gap: 10px;
-
-  &::-webkit-scrollbar {
-    display: none;
-  }
-}
-
-.toastific-position-top-right {
-  top: 10px;
-  right: 10px;
-}
-
-.toastific-position-top-left {
-  top: 10px;
-  left: 10px;
-}
-
-.toastific-position-bottom-right {
-  bottom: 10px;
-  right: 10px;
-}
-
-.toastific-position-bottom-left {
-  bottom: 10px;
-  left: 10px;
-}
-
-.toastific-position-bottom-center {
-  bottom: 10px;
-  left: 50%;
-  transform: translateX(-50%);
-}
-
-.toastific-position-top-center {
-  top: 10px;
-  left: 50%;
-  transform: translateX(-50%);
-}
-
-.toastific {
-  border-radius: 10px;
+.toastfic {
+  border-radius: 999px;
 
   height: 38px;
+  width: 300px;
 
-  color: #1a1a1a;
-  background-color: #fff;
+  background-color: var(--toastfic-bg);
   box-shadow: 3px 3px 12px rgba(53, 53, 53, 0.055) !important;
 
   display: flex;
@@ -131,38 +100,95 @@ provide("colorful", ref(props.colorful));
   gap: 8px;
 
   padding: 0 13px 0 10px;
+  margin-top: 10px;
 
   user-select: none;
 
-  animation: show-toastific 0.2s backwards;
+  animation: show-toastfic 0.5s ease;
+  transition: all 0.5s ease;
 
-  position: relative;
+  position: absolute;
   overflow: hidden;
 }
 
-@keyframes show-toastific {
+.toastfic-success {
+  color: var(--toastfic-success-text);
+  background-color: var(--toastfic-success-bg);
+}
+.toastfic-error {
+  color: var(--toastfic-error-text);
+  background-color: var(--toastfic-error-bg);
+}
+.toastfic-info {
+  color: var(--toastfic-info-text);
+  background-color: var(--toastfic-info-bg);
+}
+.toastfic-warning {
+  color: var(--toastfic-warning-text);
+  background-color: var(--toastfic-warning-bg);
+}
+
+@keyframes show-toastfic {
   0% {
     opacity: 0;
+    transform: translateY(-100%) scale(0.9);
   }
   100% {
     opacity: 1;
+    transform: translateY(1) scale(1);
   }
 }
 
-.toastific-enter-active,
-.toastific-leave-active {
-  transition: all 0.3s ease;
+.toastfic-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
-.toastific-enter-from,
-.toastific-leave-to {
+.toastfic-position-top-right {
+  top: 10px;
+  right: 10px;
+}
+
+.toastfic-position-top-left {
+  top: 10px;
+  left: 10px;
+}
+
+.toastfic-position-bottom-right {
+  bottom: 10px;
+  right: 10px;
+}
+
+.toastfic-position-bottom-left {
+  bottom: 10px;
+  left: 10px;
+}
+
+.toastfic-position-bottom-center {
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.toastfic-position-top-center {
+  top: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.toastfic-enter-active,
+.toastfic-leave-active {
+  transition: all 0.5s ease;
+}
+
+.toastfic-enter-from,
+.toastfic-leave-to {
   opacity: 0;
-  height: 0;
 }
 
-.toastific-enter-to,
-.toastific-leave-from {
+.toastfic-enter-to,
+.toastfic-leave-from {
   opacity: 1;
-  height: 38px;
 }
 </style>

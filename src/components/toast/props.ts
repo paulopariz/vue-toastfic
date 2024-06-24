@@ -3,7 +3,9 @@ export interface IProps {
   automaticClose?: boolean;
   duration?: number;
   position?: "top-left" | "top-right" | "bottom-left" | "bottom-right" | "top-center" | "bottom-center";
-  colorful?: boolean;
+  colorIcon?: boolean;
+  maxToasts?: number;
+  theme?: "light" | "dark" | "pastel";
 }
 
 export type IToastType = "success" | "error" | "info" | "warning" | "default";
