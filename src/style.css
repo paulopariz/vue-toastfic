@@ -16,30 +16,25 @@ button {
   border: none;
 }
 
+:root {
+  --toastfic-bg: #ffffff;
+  --toastfic-icon: #1a1a1a;
+  --toastfic-text: #1a1a1a;
+
+  --toastfic-success-icon: #388e3c;
+  --toastfic-info-icon: #1976d2;
+  --toastfic-warning-icon: #f57c00;
+  --toastfic-error-icon: #d32f2f;
+}
+
 [toastfic-theme="dark"] {
   --toastfic-bg: #1a1a1a;
   --toastfic-icon: #ffffff;
   --toastfic-text: #ffffff;
-
-  --toastfic-success-icon: #388e3c;
-
-  --toastfic-info-icon: #1976d2;
-
-  --toastfic-warning-icon: #f57c00;
-
-  --toastfic-error-icon: #d32f2f;
 }
 
 [toastfic-theme="light"] {
   --toastfic-bg: #ffffff;
   --toastfic-icon: #1a1a1a;
   --toastfic-text: #1a1a1a;
-
-  --toastfic-success-icon: #388e3c;
-
-  --toastfic-info-icon: #1976d2;
-
-  --toastfic-warning-icon: #f57c00;
-
-  --toastfic-error-icon: #d32f2f;
 }
