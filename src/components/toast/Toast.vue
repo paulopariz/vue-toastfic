@@ -129,89 +129,80 @@ provide("currentTheme", ref(props.theme));
   </transition-group>
 </template>
 
-<style scoped lang="scss">
+<style scoped>
 .toastfic {
   border-radius: 10px;
-
   width: 300px;
   height: min-content;
-
   background-color: var(--toastfic-bg);
-  box-shadow: 3px 3px 12px rgba(53, 53, 53, 0.055) !important;
-
+  box-shadow: 3px 3px 12px rgba(53, 53, 53, 0.055);
   padding: 10px;
   margin-top: 10px;
-
   user-select: none;
-
   animation: show-toastfic 0.5s ease;
   transition: all 0.5s ease;
-
   position: absolute;
-  // overflow: hidden;
-
   display: flex;
   gap: 10px;
+}
 
-  section {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
+.toastfic section {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  max-width: 235px;
+  height: 100%;
+}
 
-    max-width: 235px;
-    height: 100%;
+.toastfic section div {
+  display: flex;
+  flex-direction: column;
+}
 
-    div {
-      display: flex;
-      flex-direction: column;
-    }
+.toastfic.toastific-description {
+  height: 90px;
+}
+
+.toastfic.toastfic-position-top-right {
+  top: 10px;
+  right: 10px;
+}
+
+.toastfic.toastfic-position-top-left {
+  top: 10px;
+  left: 10px;
+}
+
+.toastfic.toastfic-position-bottom-right {
+  bottom: 10px;
+  right: 10px;
+}
+
+.toastfic.toastfic-position-bottom-left {
+  bottom: 10px;
+  left: 10px;
+}
+
+.toastfic.toastfic-position-bottom-center {
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.toastfic.toastfic-position-top-center {
+  top: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+@keyframes show-toastfic {
+  0% {
+    opacity: 0;
+    transform: translateY(-100%) scale(0.9);
   }
-
-  &.toastific-description {
-    height: 90px;
-  }
-
-  &.toastfic-position-top-right {
-    top: 10px;
-    right: 10px;
-  }
-
-  &.toastfic-position-top-left {
-    top: 10px;
-    left: 10px;
-  }
-
-  &.toastfic-position-bottom-right {
-    bottom: 10px;
-    right: 10px;
-  }
-
-  &.toastfic-position-bottom-left {
-    bottom: 10px;
-    left: 10px;
-  }
-
-  &.toastfic-position-bottom-center {
-    bottom: 10px;
-    left: 50%;
-    transform: translateX(-50%);
-  }
-
-  &.toastfic-position-top-center {
-    top: 10px;
-    left: 50%;
-    transform: translateX(-50%);
-  }
-
-  @keyframes show-toastfic {
-    0% {
-      opacity: 0;
-      transform: translateY(-100%) scale(0.9);
-    }
-    100% {
-      opacity: 1;
-      transform: translateY(1) scale(1);
-    }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
   }
 }
 
