@@ -11,6 +11,6 @@ h1 {
 
   color: var(--toastfic-text);
 
-  margin-top: 0.5px;
+  margin-top: 2px;
 }
 </style>

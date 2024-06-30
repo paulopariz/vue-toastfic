@@ -1,8 +1,8 @@
 <script lang="ts" setup>
-import { ToastTitle, ToastIcon, ToastAction } from "./index";
+import { ToastTitle, ToastIcon, ToastAction, ToastDescription, ToastClose } from "./index";
 
 import { useToasts } from "./toast";
-import { IProps } from "./props";
+import { IProps, IToastOptions } from "./props";
 import { watchEffect, onBeforeUnmount, provide, ref, computed } from "vue";
 
 const { toasts, removeToast } = useToasts();
@@ -49,6 +49,41 @@ function handleToast(action?: () => void, id?: number) {
   }
 }
 
+// define o top do toast de acordo com a sua altura
+function getToastStyle(index: number, toast: IToastOptions) {
+  let baseHeight = toast.description ? (toast.description.length < 36 ? 58 : 80) : 38;
+  if (toast.handle?.click && toast.description) {
+    baseHeight += 30; //aumenta 30px se existir evento de clique e descrição
+  } else if (toast.handle?.click) {
+    baseHeight += 20; //aumenta em 20px se existir apenas evento de clique
+  }
+
+  let top = 0;
+  for (let i = 0; i < index; i++) {
+    const prevToast = activeToasts.value[i];
+    let prevHeight = prevToast.description ? (prevToast.description.length < 36 ? 58 : 80) : 38;
+    if (prevToast.handle?.click && prevToast.description) {
+      prevHeight += 30;
+    } else if (prevToast.handle?.click) {
+      prevHeight += 20;
+    }
+    top += prevHeight + 10; //margem entre os toasts
+  }
+
+  return {
+    top: `${top}px`,
+    height: `${baseHeight}px`,
+  };
+}
+
+//limite de caracteres
+function limitText(text: string, maxLength: number) {
+  if (text.length > maxLength) {
+    return text.slice(0, maxLength) + "...";
+  }
+  return text;
+}
+
 watchEffect(() => {
   closeAutoToasts();
 });
@@ -66,40 +101,45 @@ provide("currentTheme", ref(props.theme));
     <div
       v-for="(toast, index) in activeToasts"
       :key="toast.id"
-      :class="[`toastfic-position-${position}`, { [`toastfic-${toast.type}`]: theme === 'pastel' }]"
-      :style="{ top: `${index * 48}px` }"
+      :class="[`toastfic-position-${position}`, { 'toastific-description': toast.description }]"
+      :style="[
+        getToastStyle(index, toast),
+        { alignItems: !toast.description && !toast.handle?.click ? 'center' : 'flex-start' },
+      ]"
       class="toastfic"
       :toastfic-theme="theme"
     >
-      <div class="toastfic-header">
-        <ToastIcon v-if="toast.type !== 'default'" :type="toast.type" />
+      <ToastClose />
 
-        <ToastTitle>
-          {{ toast.title }}
-        </ToastTitle>
-      </div>
+      <ToastIcon v-if="toast.type !== 'default'" :type="toast.type" />
 
-      <ToastAction @click="handleToast(toast.handle?.click, toast.id)">{{ toast.handle?.text }}</ToastAction>
+      <section>
+        <div>
+          <ToastTitle> {{ toast.title }} </ToastTitle>
+          <ToastDescription v-if="toast.description">
+            {{ limitText(toast.description || "", 65) }}
+          </ToastDescription>
+        </div>
+
+        <ToastAction v-if="toast.handle?.click" @click="handleToast(toast.handle?.click, toast.id)">
+          {{ toast.handle?.text }}
+        </ToastAction>
+      </section>
     </div>
   </transition-group>
 </template>
 
-<style scoped>
+<style scoped lang="scss">
 .toastfic {
-  border-radius: 999px;
+  border-radius: 10px;
 
-  height: 38px;
   width: 300px;
+  height: min-content;
 
   background-color: var(--toastfic-bg);
   box-shadow: 3px 3px 12px rgba(53, 53, 53, 0.055) !important;
 
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 8px;
-
-  padding: 0 13px 0 10px;
+  padding: 10px;
   margin-top: 10px;
 
   user-select: none;
@@ -108,73 +148,71 @@ provide("currentTheme", ref(props.theme));
   transition: all 0.5s ease;
 
   position: absolute;
-  overflow: hidden;
-}
+  // overflow: hidden;
 
-.toastfic-success {
-  color: var(--toastfic-success-text);
-  background-color: var(--toastfic-success-bg);
-}
-.toastfic-error {
-  color: var(--toastfic-error-text);
-  background-color: var(--toastfic-error-bg);
-}
-.toastfic-info {
-  color: var(--toastfic-info-text);
-  background-color: var(--toastfic-info-bg);
-}
-.toastfic-warning {
-  color: var(--toastfic-warning-text);
-  background-color: var(--toastfic-warning-bg);
-}
-
-@keyframes show-toastfic {
-  0% {
-    opacity: 0;
-    transform: translateY(-100%) scale(0.9);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(1) scale(1);
-  }
-}
-
-.toastfic-header {
   display: flex;
-  align-items: center;
   gap: 10px;
-}
 
-.toastfic-position-top-right {
-  top: 10px;
-  right: 10px;
-}
+  section {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 
-.toastfic-position-top-left {
-  top: 10px;
-  left: 10px;
-}
+    max-width: 235px;
+    height: 100%;
 
-.toastfic-position-bottom-right {
-  bottom: 10px;
-  right: 10px;
-}
+    div {
+      display: flex;
+      flex-direction: column;
+    }
+  }
 
-.toastfic-position-bottom-left {
-  bottom: 10px;
-  left: 10px;
-}
+  &.toastific-description {
+    height: 90px;
+  }
 
-.toastfic-position-bottom-center {
-  bottom: 10px;
-  left: 50%;
-  transform: translateX(-50%);
-}
+  &.toastfic-position-top-right {
+    top: 10px;
+    right: 10px;
+  }
 
-.toastfic-position-top-center {
-  top: 10px;
-  left: 50%;
-  transform: translateX(-50%);
+  &.toastfic-position-top-left {
+    top: 10px;
+    left: 10px;
+  }
+
+  &.toastfic-position-bottom-right {
+    bottom: 10px;
+    right: 10px;
+  }
+
+  &.toastfic-position-bottom-left {
+    bottom: 10px;
+    left: 10px;
+  }
+
+  &.toastfic-position-bottom-center {
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  &.toastfic-position-top-center {
+    top: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  @keyframes show-toastfic {
+    0% {
+      opacity: 0;
+      transform: translateY(-100%) scale(0.9);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(1) scale(1);
+    }
+  }
 }
 
 .toastfic-enter-active,

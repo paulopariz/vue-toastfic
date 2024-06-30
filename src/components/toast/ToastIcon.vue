@@ -40,37 +40,39 @@ if (!theme) {
 .icon {
   animation: show-icon 0.7s both;
 
-  height: 22px;
-  width: 22px;
+  height: 19px;
+  width: 19px;
 
   fill: var(--toastfic-icon);
   display: flex;
   align-items: center;
   justify-content: center;
-}
 
-.icon-success {
-  fill: var(--toastfic-success-icon);
-}
-.icon-error {
-  fill: var(--toastfic-error-icon);
-}
-.icon-info {
-  fill: var(--toastfic-info-icon);
-}
-.icon-warning {
-  fill: var(--toastfic-warning-icon);
-}
+  margin-top: 1px;
 
-@keyframes show-icon {
-  0% {
-    transform: scale(0.7);
+  &.icon-success {
+    fill: var(--toastfic-success-icon);
   }
-  50% {
-    transform: scale(1.3);
+  &.icon-error {
+    fill: var(--toastfic-error-icon);
   }
-  100% {
-    transform: scale(1);
+  &.icon-info {
+    fill: var(--toastfic-info-icon);
+  }
+  &.icon-warning {
+    fill: var(--toastfic-warning-icon);
+  }
+
+  @keyframes show-icon {
+    0% {
+      transform: scale(0.7);
+    }
+    50% {
+      transform: scale(1.3);
+    }
+    100% {
+      transform: scale(1);
+    }
   }
 }
 </style>

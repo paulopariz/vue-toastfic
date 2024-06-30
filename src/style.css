@@ -43,23 +43,3 @@ button {
 
   --toastfic-error-icon: #d32f2f;
 }
-
-[toastfic-theme="pastel"] {
-  --toastfic-icon: #1a1a1a;
-
-  --toastfic-success-bg: #099e15;
-  --toastfic-success-icon: #388e3c;
-  --toastfic-success-text: #81c784;
-
-  --toastfic-info-bg: #0569b1;
-  --toastfic-info-icon: #1976d2;
-  --toastfic-info-text: #64b5f6;
-
-  --toastfic-warning-bg: #160b00;
-  --toastfic-warning-icon: #f57c00;
-  --toastfic-warning-text: #ffb74d;
-
-  --toastfic-error-bg: #bb001c;
-  --toastfic-error-icon: #d32f2f;
-  --toastfic-error-text: #e57373;
-}

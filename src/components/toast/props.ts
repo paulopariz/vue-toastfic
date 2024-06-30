@@ -5,7 +5,7 @@ export interface IProps {
   position?: "top-left" | "top-right" | "bottom-left" | "bottom-right" | "top-center" | "bottom-center";
   colorIcon?: boolean;
   maxToasts?: number;
-  theme?: "light" | "dark" | "pastel";
+  theme?: "light" | "dark";
 }
 
 export type IToastType = "success" | "error" | "info" | "warning" | "default";

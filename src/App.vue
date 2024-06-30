@@ -3,17 +3,20 @@ import { Toast, useToast } from "./components/toast";
 
 function success() {
   useToast.success("Cadastro realizado!", {
-    description: "Descrição do toast de Success",
+    description: "Descrição do toast de Successaaaass",
   });
 }
 function error() {
   useToast.error("Ocorreu um erro", {
-    description: "Descrição do toast de Error",
+    description: "Lorem, ipsum dolor sit amet consers",
   });
 }
 function info() {
   useToast.info("Aguarde 1 minuto", {
-    description: "Descrição do toast de Info",
+    handle: {
+      text: "Beleza",
+      click: () => console.log("w"),
+    },
   });
 }
 function warning() {
@@ -47,5 +50,5 @@ function warning() {
     <br />
   </div>
 
-  <Toast :automatic-close="false" position="top-right" theme="pastel" :max-toasts="10" />
+  <Toast :automatic-close="false" position="top-right" :max-toasts="10" />
 </template>
