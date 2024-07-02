@@ -48,7 +48,7 @@ if (!theme) {
   align-items: center;
   justify-content: center;
 
-  margin-top: 1px;
+  margin-top: 2px;
 
   &.icon-success {
     fill: var(--toastfic-success-icon);

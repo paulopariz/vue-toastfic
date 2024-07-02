@@ -53,12 +53,12 @@ function handleToast(action?: () => void, id?: number) {
 function getToastStyle(index: number, toast: IToastOptions) {
   let baseHeight = toast.description ? (toast.description.length < 36 ? 58 : 80) : 38;
   if (toast.handle?.click && toast.description) {
-    baseHeight += 30; //aumenta 30px se existir evento de clique e descrição
+    baseHeight += 30; // aumenta 30px se existir evento de clique e descrição
   } else if (toast.handle?.click) {
-    baseHeight += 20; //aumenta em 20px se existir apenas evento de clique
+    baseHeight += 20; // aumenta em 20px se existir apenas evento de clique
   }
 
-  let top = 0;
+  let offset = 0;
   for (let i = 0; i < index; i++) {
     const prevToast = activeToasts.value[i];
     let prevHeight = prevToast.description ? (prevToast.description.length < 36 ? 58 : 80) : 38;
@@ -67,11 +67,12 @@ function getToastStyle(index: number, toast: IToastOptions) {
     } else if (prevToast.handle?.click) {
       prevHeight += 20;
     }
-    top += prevHeight + 10; //margem entre os toasts
+    offset += prevHeight + 10; // margem entre os toasts
   }
 
+  const isBottom = props.position.includes("bottom");
   return {
-    top: `${top}px`,
+    [isBottom ? "bottom" : "top"]: `${offset}px`,
     height: `${baseHeight}px`,
   };
 }
@@ -101,7 +102,7 @@ provide("currentTheme", ref(props.theme));
     <div
       v-for="(toast, index) in activeToasts"
       :key="toast.id"
-      :class="[`toastfic-position-${position}`, { 'toastific-description': toast.description }]"
+      :class="[`toastfic-position-${position}`, { 'toastfic-description': toast.description }]"
       :style="[
         getToastStyle(index, toast),
         { alignItems: !toast.description && !toast.handle?.click ? 'center' : 'flex-start' },
@@ -130,20 +131,68 @@ provide("currentTheme", ref(props.theme));
 </template>
 
 <style scoped>
+@import url("https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap");
+
+[toastfic-theme="dark"] {
+  --toastfic-bg: #1a1a1a;
+  --toastfic-icon: #ffffff;
+  --toastfic-text: #ffffff;
+
+  --toastfic-success-icon: #388e3c;
+
+  --toastfic-info-icon: #1976d2;
+
+  --toastfic-warning-icon: #f57c00;
+
+  --toastfic-error-icon: #d32f2f;
+}
+
+[toastfic-theme="light"] {
+  --toastfic-bg: #ffffff;
+  --toastfic-icon: #1a1a1a;
+  --toastfic-text: #1a1a1a;
+
+  --toastfic-success-icon: #388e3c;
+
+  --toastfic-info-icon: #1976d2;
+
+  --toastfic-warning-icon: #f57c00;
+
+  --toastfic-error-icon: #d32f2f;
+}
+
+* {
+  font-family: "Nunito", sans-serif;
+  padding: 0;
+  box-sizing: border-box;
+  margin: 0;
+}
+
 .toastfic {
   border-radius: 10px;
+
   width: 300px;
   height: min-content;
+
   background-color: var(--toastfic-bg);
   box-shadow: 3px 3px 12px rgba(53, 53, 53, 0.055);
+
   padding: 10px;
-  margin-top: 10px;
+
   user-select: none;
-  animation: show-toastfic 0.5s ease;
   transition: all 0.5s ease;
-  position: absolute;
+
+  position: fixed;
   display: flex;
-  gap: 10px;
+  gap: 8px;
+}
+
+@media (max-width: 600px) {
+  .toastfic {
+    width: 95%;
+    left: 50%;
+    transform: translateX(-50%);
+  }
 }
 
 .toastfic section {
@@ -159,43 +208,75 @@ provide("currentTheme", ref(props.theme));
   flex-direction: column;
 }
 
-.toastfic.toastific-description {
+.toastfic.toastfic-description {
   height: 90px;
 }
 
 .toastfic.toastfic-position-top-right {
   top: 10px;
   right: 10px;
+  margin-top: 10px;
+  animation: show-toastfic-top 0.5s ease;
 }
 
 .toastfic.toastfic-position-top-left {
   top: 10px;
   left: 10px;
-}
-
-.toastfic.toastfic-position-bottom-right {
-  bottom: 10px;
-  right: 10px;
-}
-
-.toastfic.toastfic-position-bottom-left {
-  bottom: 10px;
-  left: 10px;
-}
-
-.toastfic.toastfic-position-bottom-center {
-  bottom: 10px;
-  left: 50%;
-  transform: translateX(-50%);
+  margin-top: 10px;
+  animation: show-toastfic-top 0.5s ease;
 }
 
 .toastfic.toastfic-position-top-center {
   top: 10px;
   left: 50%;
   transform: translateX(-50%);
+  margin-top: 10px;
+  animation: show-toastfic-top-center 0.5s ease;
 }
 
-@keyframes show-toastfic {
+.toastfic.toastfic-position-bottom-right {
+  bottom: 10px;
+  right: 10px;
+  animation: show-toastfic-bottom 0.5s ease;
+  margin-bottom: 10px;
+}
+
+.toastfic.toastfic-position-bottom-left {
+  bottom: 10px;
+  left: 10px;
+  animation: show-toastfic-bottom 0.5s ease;
+  margin-bottom: 10px;
+}
+
+.toastfic.toastfic-position-bottom-center {
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  animation: show-toastfic-bottom-center 0.5s ease;
+  margin-bottom: 10px;
+}
+
+@media (max-width: 600px) {
+  .toastfic.toastfic-position-top-right,
+  .toastfic.toastfic-position-top-left,
+  .toastfic.toastfic-position-top-center {
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    right: auto;
+  }
+
+  .toastfic.toastfic-position-bottom-right,
+  .toastfic.toastfic-position-bottom-left,
+  .toastfic.toastfic-position-bottom-center {
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    right: auto;
+  }
+}
+
+@keyframes show-toastfic-top {
   0% {
     opacity: 0;
     transform: translateY(-100%) scale(0.9);
@@ -203,6 +284,59 @@ provide("currentTheme", ref(props.theme));
   100% {
     opacity: 1;
     transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes show-toastfic-bottom {
+  0% {
+    opacity: 0;
+    transform: translateY(100%) scale(0.9);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes show-toastfic-bottom-center {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, 100%) scale(0.9);
+  }
+  100% {
+    opacity: 1;
+    transform: translate(-50%, 0) scale(1);
+  }
+}
+
+@keyframes show-toastfic-top-center {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -100%) scale(0.9);
+  }
+  100% {
+    opacity: 1;
+    transform: translate(-50%, 0) scale(1);
+  }
+}
+
+@media (max-width: 600px) {
+  @keyframes show-toastfic-bottom {
+    0% {
+      transform: translate(-50%, 100%) scale(0.9);
+    }
+    100% {
+      transform: translate(-50%, 0) scale(1);
+    }
+  }
+
+  @keyframes show-toastfic-top {
+    0% {
+      transform: translate(-50%, -100%) scale(0.9);
+    }
+    100% {
+      transform: translate(-50%, 0) scale(1);
+    }
   }
 }
 

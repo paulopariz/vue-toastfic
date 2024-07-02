@@ -36,19 +36,19 @@ function warning() {
       <img src="/vite.svg" class="logo" alt="Vite logo" />
     </a>
 
-    <button style="color: aliceblue" @click="success">success</button>
+    <p style="color: aliceblue; cursor: pointer" @click="success">success</p>
     <br />
     <br />
-    <button style="color: aliceblue" @click="error">error</button>
+    <p style="color: aliceblue; cursor: pointer" @click="error">error</p>
     <br />
     <br />
-    <button style="color: aliceblue" @click="info">info</button>
+    <p style="color: aliceblue; cursor: pointer" @click="info">info</p>
     <br />
     <br />
-    <button style="color: aliceblue" @click="warning">warning</button>
+    <p style="color: aliceblue; cursor: pointer" @click="warning">warning</p>
     <br />
     <br />
   </div>
 
-  <Toast :automatic-close="false" position="top-right" :max-toasts="10" />
+  <Toast :automatic-close="false" position="top-right" theme="dark" :max-toasts="10" />
 </template>

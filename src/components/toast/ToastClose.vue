@@ -11,20 +11,27 @@
 <style scoped>
 .toastfic-close {
   position: absolute;
-  top: 6px;
-  right: 4px;
+  top: 14px;
+  right: 8px;
 
   width: 18px;
   height: 18px;
 
   border-radius: 999px;
+  border: none;
+
+  background-color: transparent;
 
   opacity: 0.8;
   transition: all 0.3s;
+
+  outline: none;
+  background-color: transparent;
+  cursor: pointer;
+  border: none;
 }
 
 .toastfic-close:hover {
-  transform: scale(1.03);
   opacity: 1;
 }
 </style>
