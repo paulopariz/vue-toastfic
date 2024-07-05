@@ -3,7 +3,7 @@ import { Toast, useToast } from "./components/toast";
 
 function success() {
   useToast.success("Cadastro realizado!", {
-    description: "Descrição do toast de Successaaaass s s s",
+    description: "Descrição do toast de Success",
   });
 }
 function error() {
@@ -65,5 +65,25 @@ function defaultT() {
     <p style="color: aliceblue; cursor: pointer" @click="defaultT">default</p>
   </div>
 
-  <Toast :automatic-close="false" position="bottom-center" :close="true" theme="dark" :max-toasts="10" />
+  <Toast
+    :automatic-close="false"
+    position="bottom-center"
+    :close="true"
+    theme="dark"
+    :max-toasts="10"
+    :classes="{
+      toast: 'classe-toast',
+      title: 'classe-title',
+      description: 'classe-description',
+      buttonHandle: 'classe-handle',
+      buttonClose: 'classe-close',
+      icon: 'classe-icon',
+      icons: {
+        success: 'classe-icon-success',
+        error: 'classe-icon-error',
+        info: 'classe-icon-info',
+        warning: 'classe-icon-warning',
+      },
+    }"
+  />
 </template>

@@ -14,6 +14,8 @@ const emit = defineEmits(["click"]);
   font-size: 12px;
   color: var(--toastfic-text);
 
+  width: min-content;
+
   cursor: pointer;
   text-decoration-line: underline;
 }

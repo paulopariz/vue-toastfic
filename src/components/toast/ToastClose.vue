@@ -33,6 +33,10 @@ const emit = defineEmits(["click"]);
   background-color: transparent;
   cursor: pointer;
   border: none;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .toastfic-close:hover {

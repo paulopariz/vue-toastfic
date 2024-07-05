@@ -51,7 +51,7 @@ function handleToast(action?: () => void, id?: number) {
 
 // define o top do toast de acordo com a sua altura
 function getToastStyle(index: number, toast: IToastOptions) {
-  let baseHeight = toast.description ? (toast.description.length < 36 ? 58 : 80) : 38;
+  let baseHeight = toast.description ? (toast.description.length < 36 ? 58 : 80) : 52;
   if (toast.handle?.click && toast.description) {
     baseHeight += 30; // aumenta 30px se existir evento de clique e descrição
   } else if (toast.handle?.click) {
@@ -61,7 +61,7 @@ function getToastStyle(index: number, toast: IToastOptions) {
   let offset = 0;
   for (let i = 0; i < index; i++) {
     const prevToast = activeToasts.value[i];
-    let prevHeight = prevToast.description ? (prevToast.description.length < 36 ? 58 : 80) : 38;
+    let prevHeight = prevToast.description ? (prevToast.description.length < 36 ? 58 : 80) : 52;
     if (prevToast.handle?.click && prevToast.description) {
       prevHeight += 30;
     } else if (prevToast.handle?.click) {
@@ -102,7 +102,11 @@ provide("currentTheme", ref(props.theme));
     <div
       v-for="(toast, index) in activeToasts"
       :key="toast.id"
-      :class="[`toastfic-position-${props.position}`, { 'toastfic-description': toast.description }]"
+      :class="[
+        `toastfic-position-${props.position}`,
+        props.classes?.toast,
+        { 'toastfic-description': toast.description },
+      ]"
       :style="[
         getToastStyle(index, toast),
         { alignItems: !toast.description && !toast.handle?.click ? 'center' : 'flex-start' },
@@ -110,19 +114,23 @@ provide("currentTheme", ref(props.theme));
       class="toastfic"
       :toastfic-theme="theme"
     >
-      <ToastClose v-if="props.close" @click="removeToast(toast.id)" />
+      <ToastClose v-if="props.close" :class="props.classes?.buttonClose" @click="removeToast(toast.id)" />
 
-      <ToastIcon v-if="toast.type !== 'default'" :type="toast.type" />
+      <ToastIcon v-if="toast.type !== 'default'" :class="props.classes?.icon" :type="toast.type" />
 
       <section>
         <div>
-          <ToastTitle> {{ toast.title }} </ToastTitle>
-          <ToastDescription v-if="toast.description">
+          <ToastTitle :class="props.classes?.title"> {{ toast.title }} </ToastTitle>
+          <ToastDescription v-if="toast.description" :class="props.classes?.description">
             {{ limitText(toast.description || "", 65) }}
           </ToastDescription>
         </div>
 
-        <ToastAction v-if="toast.handle?.click" @click="handleToast(toast.handle?.click, toast.id)">
+        <ToastAction
+          v-if="toast.handle?.click"
+          :class="props.classes?.buttonHandle"
+          @click="handleToast(toast.handle?.click, toast.id)"
+        >
           {{ toast.handle?.text }}
         </ToastAction>
       </section>

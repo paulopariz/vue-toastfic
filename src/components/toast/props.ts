@@ -6,6 +6,20 @@ export interface IProps {
   colorIcon?: boolean;
   maxToasts?: number;
   theme?: "light" | "dark";
+  classes?: {
+    toast?: string;
+    title?: string;
+    description?: string;
+    buttonHandle?: string;
+    buttonClose?: string;
+    icon?: string;
+    icons?: {
+      success?: string;
+      error?: string;
+      info?: string;
+      warning?: string;
+    };
+  };
 }
 
 export type IToastType = "success" | "error" | "info" | "warning" | "default";
