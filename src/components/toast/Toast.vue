@@ -98,11 +98,11 @@ provide("currentTheme", ref(props.theme));
 </script>
 
 <template>
-  <transition-group name="toastfic">
+  <transition-group :name="props.position.includes('bottom') ? 'toastfic-bottom' : 'toastfic-top'">
     <div
       v-for="(toast, index) in activeToasts"
       :key="toast.id"
-      :class="[`toastfic-position-${position}`, { 'toastfic-description': toast.description }]"
+      :class="[`toastfic-position-${props.position}`, { 'toastfic-description': toast.description }]"
       :style="[
         getToastStyle(index, toast),
         { alignItems: !toast.description && !toast.handle?.click ? 'center' : 'flex-start' },
@@ -110,7 +110,7 @@ provide("currentTheme", ref(props.theme));
       class="toastfic"
       :toastfic-theme="theme"
     >
-      <ToastClose />
+      <ToastClose v-if="props.close" @click="removeToast(toast.id)" />
 
       <ToastIcon v-if="toast.type !== 'default'" :type="toast.type" />
 
@@ -134,7 +134,7 @@ provide("currentTheme", ref(props.theme));
 @import url("https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap");
 
 [toastfic-theme="dark"] {
-  --toastfic-bg: #1a1a1a;
+  --toastfic-bg: #171b22;
   --toastfic-icon: #ffffff;
   --toastfic-text: #ffffff;
 
@@ -149,8 +149,8 @@ provide("currentTheme", ref(props.theme));
 
 [toastfic-theme="light"] {
   --toastfic-bg: #ffffff;
-  --toastfic-icon: #1a1a1a;
-  --toastfic-text: #1a1a1a;
+  --toastfic-icon: #171b22;
+  --toastfic-text: #171b22;
 
   --toastfic-success-icon: #388e3c;
 
@@ -183,23 +183,16 @@ provide("currentTheme", ref(props.theme));
   transition: all 0.5s ease;
 
   position: fixed;
+  overflow: hidden;
+
   display: flex;
   gap: 8px;
-}
-
-@media (max-width: 600px) {
-  .toastfic {
-    width: 95%;
-    left: 50%;
-    transform: translateX(-50%);
-  }
 }
 
 .toastfic section {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  max-width: 235px;
   height: 100%;
 }
 
@@ -216,14 +209,12 @@ provide("currentTheme", ref(props.theme));
   top: 10px;
   right: 10px;
   margin-top: 10px;
-  animation: show-toastfic-top 0.5s ease;
 }
 
 .toastfic.toastfic-position-top-left {
   top: 10px;
   left: 10px;
   margin-top: 10px;
-  animation: show-toastfic-top 0.5s ease;
 }
 
 .toastfic.toastfic-position-top-center {
@@ -231,20 +222,17 @@ provide("currentTheme", ref(props.theme));
   left: 50%;
   transform: translateX(-50%);
   margin-top: 10px;
-  animation: show-toastfic-top-center 0.5s ease;
 }
 
 .toastfic.toastfic-position-bottom-right {
   bottom: 10px;
   right: 10px;
-  animation: show-toastfic-bottom 0.5s ease;
   margin-bottom: 10px;
 }
 
 .toastfic.toastfic-position-bottom-left {
   bottom: 10px;
   left: 10px;
-  animation: show-toastfic-bottom 0.5s ease;
   margin-bottom: 10px;
 }
 
@@ -252,7 +240,6 @@ provide("currentTheme", ref(props.theme));
   bottom: 10px;
   left: 50%;
   transform: translateX(-50%);
-  animation: show-toastfic-bottom-center 0.5s ease;
   margin-bottom: 10px;
 }
 
@@ -275,83 +262,86 @@ provide("currentTheme", ref(props.theme));
     right: auto;
   }
 }
-
-@keyframes show-toastfic-top {
-  0% {
-    opacity: 0;
-    transform: translateY(-100%) scale(0.9);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-  }
+.toastfic-bottom-enter-active,
+.toastfic-bottom-leave-active,
+.toastfic-top-enter-active,
+.toastfic-top-leave-active {
+  transition: all 0.5s ease;
 }
 
-@keyframes show-toastfic-bottom {
-  0% {
-    opacity: 0;
-    transform: translateY(100%) scale(0.9);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-  }
+.toastfic-bottom-enter-from,
+.toastfic-bottom-leave-to,
+.toastfic-top-enter-from,
+.toastfic-top-leave-to {
+  opacity: 0;
+  z-index: -1;
 }
 
-@keyframes show-toastfic-bottom-center {
-  0% {
-    opacity: 0;
-    transform: translate(-50%, 100%) scale(0.9);
-  }
-  100% {
-    opacity: 1;
-    transform: translate(-50%, 0) scale(1);
-  }
+.toastfic-bottom-enter-to,
+.toastfic-bottom-leave-from,
+.toastfic-top-enter-to,
+.toastfic-top-leave-from {
+  opacity: 1;
 }
 
-@keyframes show-toastfic-top-center {
-  0% {
-    opacity: 0;
-    transform: translate(-50%, -100%) scale(0.9);
+.toastfic-bottom-enter-from,
+.toastfic-bottom-leave-to {
+  transform: translate(-50%, 100%) !important;
+}
+
+.toastfic-top-enter-from,
+.toastfic-top-leave-to {
+  transform: translateY(-100%) !important;
+}
+
+.toastfic-bottom-center-enter-from,
+.toastfic-bottom-center-leave-to,
+.toastfic-top-center-enter-from,
+.toastfic-top-center-leave-to {
+  opacity: 0;
+  z-index: -1;
+  transform: translate(-50%, 100%) scale(0.9) !important;
+}
+
+.toastfic-bottom-center-enter-to,
+.toastfic-bottom-center-leave-from,
+.toastfic-top-center-enter-to,
+.toastfic-top-center-leave-from {
+  opacity: 1;
+  transform: translate(-50%, 0) scale(1) !important;
+}
+
+@media (max-width: 600px) {
+  .toastfic-bottom-enter-from,
+  .toastfic-bottom-leave-to {
+    transform: translate(-50%, 100%) scale(0.9) !important;
   }
-  100% {
-    opacity: 1;
-    transform: translate(-50%, 0) scale(1);
+
+  .toastfic-bottom-enter-to,
+  .toastfic-bottom-leave-from {
+    transform: translate(-50%, 0) scale(1) !important;
+  }
+
+  .toastfic-top-enter-from,
+  .toastfic-top-leave-to {
+    transform: translate(-50%, -100%) scale(0.9) !important;
+  }
+
+  .toastfic-top-enter-to,
+  .toastfic-top-leave-from {
+    transform: translate(-50%, 0) scale(1) !important;
   }
 }
 
 @media (max-width: 600px) {
-  @keyframes show-toastfic-bottom {
-    0% {
-      transform: translate(-50%, 100%) scale(0.9);
-    }
-    100% {
-      transform: translate(-50%, 0) scale(1);
-    }
+  .toastfic {
+    width: 95%;
+    left: 50%;
+    transform: translateX(-50%);
   }
 
-  @keyframes show-toastfic-top {
-    0% {
-      transform: translate(-50%, -100%) scale(0.9);
-    }
-    100% {
-      transform: translate(-50%, 0) scale(1);
-    }
+  .toastfic section {
+    max-width: 100%;
   }
-}
-
-.toastfic-enter-active,
-.toastfic-leave-active {
-  transition: all 0.5s ease;
-}
-
-.toastfic-enter-from,
-.toastfic-leave-to {
-  opacity: 0;
-}
-
-.toastfic-enter-to,
-.toastfic-leave-from {
-  opacity: 1;
 }
 </style>

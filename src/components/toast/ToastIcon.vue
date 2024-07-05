@@ -29,11 +29,13 @@ if (!theme) {
 </script>
 
 <template>
-  <component
-    :is="iconComponents[props.type]"
-    class="icon"
-    :class="{ [`icon-${$props.type}`]: isIconColor || theme === 'pastel' }"
-  />
+  <div>
+    <component
+      :is="iconComponents[props.type]"
+      class="icon"
+      :class="{ [`icon-${$props.type}`]: isIconColor || theme === 'pastel' }"
+    />
+  </div>
 </template>
 
 <style scoped>
@@ -49,30 +51,30 @@ if (!theme) {
   justify-content: center;
 
   margin-top: 2px;
+}
 
-  &.icon-success {
-    fill: var(--toastfic-success-icon);
+@keyframes show-icon {
+  0% {
+    transform: scale(0.7);
   }
-  &.icon-error {
-    fill: var(--toastfic-error-icon);
+  50% {
+    transform: scale(1.3);
   }
-  &.icon-info {
-    fill: var(--toastfic-info-icon);
+  100% {
+    transform: scale(1);
   }
-  &.icon-warning {
-    fill: var(--toastfic-warning-icon);
-  }
+}
 
-  @keyframes show-icon {
-    0% {
-      transform: scale(0.7);
-    }
-    50% {
-      transform: scale(1.3);
-    }
-    100% {
-      transform: scale(1);
-    }
-  }
+.icon-success {
+  fill: var(--toastfic-success-icon);
+}
+.icon-error {
+  fill: var(--toastfic-error-icon);
+}
+.icon-info {
+  fill: var(--toastfic-info-icon);
+}
+.icon-warning {
+  fill: var(--toastfic-warning-icon);
 }
 </style>
