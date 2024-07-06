@@ -35,6 +35,26 @@ const props = withDefaults(
   }
 );
 
+//transition do toast
+const transitionName = computed(() => {
+  switch (props.position) {
+    case "top-center":
+      return "toastfic-top-center";
+    case "top-left":
+      return "toastfic-top-left";
+    case "top-right":
+      return "toastfic-top-right";
+    case "bottom-left":
+      return "toastfic-bottom-left";
+    case "bottom-right":
+      return "toastfic-bottom-right";
+    case "bottom-center":
+      return "toastfic-bottom-center";
+    default:
+      return "toastfic";
+  }
+});
+
 //limite de toasts a serem exibidos
 const activeToasts = computed(() => toasts.value.slice(0, props.maxToasts));
 
@@ -130,7 +150,7 @@ provide("currentTheme", ref(props.theme));
 </script>
 
 <template>
-  <transition-group :name="props.position.includes('bottom') ? 'toastfic-bottom' : 'toastfic-top'">
+  <transition-group :name="transitionName">
     <div
       v-for="(toast, index) in activeToasts"
       :key="toast.id"
@@ -332,72 +352,161 @@ provide("currentTheme", ref(props.theme));
 .toastfic-bottom-enter-active,
 .toastfic-bottom-leave-active,
 .toastfic-top-enter-active,
-.toastfic-top-leave-active {
+.toastfic-top-leave-active,
+.toastfic-top-center-enter-active,
+.toastfic-top-center-leave-active,
+.toastfic-bottom-center-enter-active,
+.toastfic-bottom-center-leave-active,
+.toastfic-top-left-enter-active,
+.toastfic-top-left-leave-active,
+.toastfic-top-right-enter-active,
+.toastfic-top-right-leave-active,
+.toastfic-bottom-left-enter-active,
+.toastfic-bottom-left-leave-active,
+.toastfic-bottom-right-enter-active,
+.toastfic-bottom-right-leave-active {
   transition: all 0.5s ease;
 }
 
 .toastfic-bottom-enter-from,
 .toastfic-bottom-leave-to,
 .toastfic-top-enter-from,
-.toastfic-top-leave-to {
+.toastfic-top-leave-to,
+.toastfic-top-center-enter-from,
+.toastfic-top-center-leave-to,
+.toastfic-bottom-center-enter-from,
+.toastfic-bottom-center-leave-to,
+.toastfic-top-left-enter-from,
+.toastfic-top-left-leave-to,
+.toastfic-top-right-enter-from,
+.toastfic-top-right-leave-to,
+.toastfic-bottom-left-enter-from,
+.toastfic-bottom-left-leave-to,
+.toastfic-bottom-right-enter-from,
+.toastfic-bottom-right-leave-to {
   opacity: 0;
-  z-index: -1;
+  z-index: -1 !important;
 }
 
 .toastfic-bottom-enter-to,
 .toastfic-bottom-leave-from,
 .toastfic-top-enter-to,
-.toastfic-top-leave-from {
-  opacity: 1;
-}
-
-.toastfic-bottom-enter-from,
-.toastfic-bottom-leave-to {
-  /* transform: translate(-50%, 100%) !important; */
-  bottom: -10% !important;
-}
-
-.toastfic-top-enter-from,
-.toastfic-top-leave-to {
-  /* transform: translate(-50%, -100%) !important; */
-  top: -10% !important;
-}
-
-.toastfic-bottom-center-enter-from,
-.toastfic-bottom-center-leave-to,
-.toastfic-top-center-enter-from,
-.toastfic-top-center-leave-to {
-  opacity: 0;
-  z-index: -1;
-  transform: translate(-50%, 100%) scale(0.9) !important;
-}
-
+.toastfic-top-leave-from,
+.toastfic-top-center-enter-to,
+.toastfic-top-center-leave-from,
 .toastfic-bottom-center-enter-to,
 .toastfic-bottom-center-leave-from,
-.toastfic-top-center-enter-to,
-.toastfic-top-center-leave-from {
+.toastfic-top-left-enter-to,
+.toastfic-top-left-leave-from,
+.toastfic-top-right-enter-to,
+.toastfic-top-right-leave-from,
+.toastfic-bottom-left-enter-to,
+.toastfic-bottom-left-leave-from,
+.toastfic-bottom-right-enter-to,
+.toastfic-bottom-right-leave-from {
   opacity: 1;
-  transform: translate(-50%, 0) scale(1) !important;
+}
+
+.toastfic-bottom-enter-from {
+  transform: translateY(100%) !important;
+}
+
+.toastfic-bottom-leave-to {
+  transform: translateY(-100%) !important;
+}
+
+.toastfic-top-enter-from {
+  transform: translateY(-100%) !important;
+}
+
+.toastfic-top-leave-to {
+  transform: translateY(100%) !important;
+}
+
+.toastfic-top-center-enter-from {
+  transform: translate(-50%, -100%) !important;
+}
+
+.toastfic-top-center-leave-to {
+  transform: translate(-50%, -100%) !important;
+}
+.toastfic-bottom-center-leave-to {
+  transform: translate(-50%, 100%) !important;
+}
+.toastfic-bottom-center-enter-from {
+  transform: translate(-50%, 100%) !important;
+}
+
+.toastfic-top-left-enter-from {
+  transform: translateY(-100%) !important;
+}
+
+.toastfic-top-left-leave-to {
+  transform: translateY(-100%) !important;
+}
+
+.toastfic-top-right-enter-from {
+  transform: translateY(-100%) !important;
+}
+
+.toastfic-top-right-leave-to {
+  transform: translateY(-100%) !important;
+}
+
+.toastfic-bottom-left-enter-from {
+  transform: translateY(100%) !important;
+}
+
+.toastfic-bottom-left-leave-to {
+  transform: translateY(100%) !important;
+}
+
+.toastfic-bottom-right-enter-from {
+  transform: translateY(100%) !important;
+}
+
+.toastfic-bottom-right-leave-to {
+  transform: translateY(100%) !important;
 }
 
 @media (max-width: 600px) {
   .toastfic-bottom-enter-from,
-  .toastfic-bottom-leave-to {
+  .toastfic-bottom-leave-to,
+  .toastfic-top-enter-from,
+  .toastfic-top-leave-to,
+  .toastfic-top-center-enter-from,
+  .toastfic-top-center-leave-to,
+  .toastfic-top-left-enter-from,
+  .toastfic-top-left-leave-to,
+  .toastfic-top-right-enter-from,
+  .toastfic-top-right-leave-to,
+  .toastfic-bottom-left-leave-to {
+    transform: translate(-50%, -100%) scale(0.9) !important;
+  }
+
+  .toastfic-bottom-left-enter-from,
+  .toastfic-bottom-right-enter-from,
+  .toastfic-bottom-left-leave-to,
+  .toastfic-bottom-right-leave-to {
     transform: translate(-50%, 100%) scale(0.9) !important;
   }
 
   .toastfic-bottom-enter-to,
-  .toastfic-bottom-leave-from {
-    transform: translate(-50%, 0) scale(1) !important;
-  }
-
-  .toastfic-top-enter-from,
-  .toastfic-top-leave-to {
-    transform: translate(-50%, -100%) scale(0.9) !important;
-  }
-
+  .toastfic-bottom-leave-from,
   .toastfic-top-enter-to,
-  .toastfic-top-leave-from {
+  .toastfic-top-leave-from,
+  .toastfic-top-center-enter-to,
+  .toastfic-top-center-leave-from,
+  .toastfic-bottom-center-enter-to,
+  .toastfic-bottom-center-leave-from,
+  .toastfic-top-left-enter-to,
+  .toastfic-top-left-leave-from,
+  .toastfic-top-right-enter-to,
+  .toastfic-top-right-leave-from,
+  .toastfic-bottom-left-enter-to,
+  .toastfic-bottom-left-leave-from,
+  .toastfic-bottom-right-enter-to,
+  .toastfic-bottom-right-leave-from {
     transform: translate(-50%, 0) scale(1) !important;
   }
 }

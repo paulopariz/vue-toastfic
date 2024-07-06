@@ -63,7 +63,7 @@ function defaultT() {
   </div>
 
   <Toast
-    :duration="5000"
+    :duration="1000"
     position="top-right"
     :close="true"
     :colorful="false"
