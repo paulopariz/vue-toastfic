@@ -15,7 +15,7 @@ const emit = defineEmits(["click"]);
 <style scoped>
 .toastfic-close {
   position: absolute;
-  top: 14px;
+  /* top: 14px; */
   right: 8px;
 
   width: 18px;

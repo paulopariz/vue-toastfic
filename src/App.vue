@@ -9,37 +9,34 @@ function success() {
 function error() {
   useToast.error("Ocorreu um erro", {
     description: "Lorem, ipsum dolor sit amet conseraaaaa aaaaaaaa aa aa a aaaaaaaaaa aa aaaa aaaaaaaaaaaaaaaaas",
-    handle: {
-      text: "Beleza",
-      click: () => console.log("w"),
-    },
+    duration: 6000,
   });
 }
 function info() {
   useToast.info("Aguarde 1 minuto para atualizar o seu dados cadastrados", {
-    handle: {
-      text: "Beleza",
-      click: () => console.log("w"),
-    },
+    // handle: {
+    //   text: "Beleza",
+    //   click: () => console.log("w"),
+    // },
   });
 }
 function warning() {
   useToast.warning("Ultímas chances!", {
     description: "Descrição do toast de Warning",
-    handle: {
-      text: "OK",
-      click: () => console.log("e"),
-    },
+    // handle: {
+    //   text: "OK",
+    //   click: () => console.log("e"),
+    // },
   });
 }
 
 function defaultT() {
   useToast.default("Aguarde 1 minutoewqeqweqwsdfsdfsdf dwqdqwdwdqwdqwdqwdddddddddddddddddddddddddddw qwewe", {
     description: "Descrição do toast de Warning",
-    handle: {
-      text: "Beleza",
-      click: () => console.log("w"),
-    },
+    // handle: {
+    //   text: "Beleza",
+    //   click: () => console.log("w"),
+    // },
   });
 }
 </script>
@@ -66,11 +63,13 @@ function defaultT() {
   </div>
 
   <Toast
-    :automatic-close="false"
-    position="bottom-center"
+    :duration="5000"
+    position="top-right"
     :close="true"
+    :colorful="false"
     theme="dark"
     :max-toasts="10"
+    :progress-bar="true"
     :classes="{
       toast: 'classe-toast',
       title: 'classe-title',

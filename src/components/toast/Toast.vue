@@ -7,31 +7,62 @@ import { watchEffect, onBeforeUnmount, provide, ref, computed } from "vue";
 
 const { toasts, removeToast } = useToasts();
 
-const props = withDefaults(defineProps<IProps>(), {
-  close: true,
-  duration: 4000,
-  automaticClose: true,
-  position: "top-right",
-  colorIcon: true,
-  maxToasts: 7,
-  theme: "light",
-});
+const props = withDefaults(
+  defineProps<
+    Pick<
+      IProps,
+      | "close"
+      | "duration"
+      | "automaticClose"
+      | "position"
+      | "colorful"
+      | "maxToasts"
+      | "theme"
+      | "progressBar"
+      | "classes"
+    >
+  >(),
+  {
+    close: true,
+    duration: 4000,
+    automaticClose: true,
+    position: "top-right",
+    colorful: true,
+    maxToasts: 7,
+    theme: "light",
+    classes: undefined,
+    progressBar: true,
+  }
+);
 
 //limite de toasts a serem exibidos
 const activeToasts = computed(() => toasts.value.slice(0, props.maxToasts));
 
 const activeTimeouts = new Map<number, ReturnType<typeof setTimeout>>();
+const progressMap = ref<Record<number, number>>({});
+
 function closeAutoToasts() {
   if (!props.automaticClose) return;
 
-  toasts.value.forEach((toast) => {
-    // se existir evento handle o toast não irá fechar automaticamente
+  activeToasts.value.forEach((toast) => {
     if (toast.handle?.click) return;
 
-    //fecha o toast automaticamente, com a duration das options ou da props
     if (!activeTimeouts.has(toast.id)) {
       const toastDuration = toast.duration ?? props.duration;
+      const startTime = Date.now();
+
+      const interval = setInterval(() => {
+        const elapsedTime = Date.now() - startTime;
+        const progress = Math.min((elapsedTime / toastDuration) * 100, 100);
+        progressMap.value[toast.id] = progress;
+
+        if (progress >= 100) {
+          clearInterval(interval);
+        }
+      }, 100);
+
       const timeout = setTimeout(() => {
+        clearInterval(interval);
         removeToast(toast.id);
         activeTimeouts.delete(toast.id);
       }, toastDuration);
@@ -62,6 +93,7 @@ function getToastStyle(index: number, toast: IToastOptions) {
   for (let i = 0; i < index; i++) {
     const prevToast = activeToasts.value[i];
     let prevHeight = prevToast.description ? (prevToast.description.length < 36 ? 58 : 80) : 52;
+
     if (prevToast.handle?.click && prevToast.description) {
       prevHeight += 30;
     } else if (prevToast.handle?.click) {
@@ -93,7 +125,7 @@ onBeforeUnmount(() => {
   activeTimeouts.forEach((timeout) => clearTimeout(timeout));
 });
 
-provide("isIconColor", ref(props.colorIcon));
+provide("isIconColor", ref(props.colorful));
 provide("currentTheme", ref(props.theme));
 </script>
 
@@ -118,7 +150,7 @@ provide("currentTheme", ref(props.theme));
 
       <ToastIcon v-if="toast.type !== 'default'" :class="props.classes?.icon" :type="toast.type" />
 
-      <section>
+      <section :style="{ justifyContent: !toast.description && !toast.handle?.click ? 'center' : 'space-between' }">
         <div>
           <ToastTitle :class="props.classes?.title"> {{ toast.title }} </ToastTitle>
           <ToastDescription v-if="toast.description" :class="props.classes?.description">
@@ -134,6 +166,20 @@ provide("currentTheme", ref(props.theme));
           {{ toast.handle?.text }}
         </ToastAction>
       </section>
+
+      <div
+        v-if="props.progressBar"
+        class="progress-bar"
+        :style="[
+          { width: `${progressMap[toast.id]}%` },
+          {
+            backgroundColor:
+              toast.type !== 'default' && props.colorful
+                ? `var(--toastfic-${toast.type}-icon)`
+                : 'var(--toastfic-icon)',
+          },
+        ]"
+      />
     </div>
   </transition-group>
 </template>
@@ -183,7 +229,7 @@ provide("currentTheme", ref(props.theme));
   height: min-content;
 
   background-color: var(--toastfic-bg);
-  box-shadow: 3px 3px 12px rgba(53, 53, 53, 0.055);
+  box-shadow: 3px 3px 12px rgba(53, 53, 53, 0.137);
 
   padding: 10px;
 
@@ -200,7 +246,6 @@ provide("currentTheme", ref(props.theme));
 .toastfic section {
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
   height: 100%;
 }
 
@@ -211,6 +256,20 @@ provide("currentTheme", ref(props.theme));
 
 .toastfic.toastfic-description {
   height: 90px;
+}
+
+.progress-bar {
+  height: 15px;
+  transition: width 0.1s linear;
+
+  position: absolute;
+  bottom: 0;
+  left: 0;
+
+  border-radius: 5px;
+  background-color: var(--toastfic-success-icon);
+
+  height: 3px;
 }
 
 .toastfic.toastfic-position-top-right {
@@ -294,12 +353,14 @@ provide("currentTheme", ref(props.theme));
 
 .toastfic-bottom-enter-from,
 .toastfic-bottom-leave-to {
-  transform: translate(-50%, 100%) !important;
+  /* transform: translate(-50%, 100%) !important; */
+  bottom: -10% !important;
 }
 
 .toastfic-top-enter-from,
 .toastfic-top-leave-to {
-  transform: translateY(-100%) !important;
+  /* transform: translate(-50%, -100%) !important; */
+  top: -10% !important;
 }
 
 .toastfic-bottom-center-enter-from,

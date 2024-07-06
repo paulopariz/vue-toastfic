@@ -3,9 +3,10 @@ export interface IProps {
   automaticClose?: boolean;
   duration?: number;
   position?: "top-left" | "top-right" | "bottom-left" | "bottom-right" | "top-center" | "bottom-center";
-  colorIcon?: boolean;
+  colorful?: boolean;
   maxToasts?: number;
   theme?: "light" | "dark";
+  progressBar?: boolean;
   classes?: {
     toast?: string;
     title?: string;
