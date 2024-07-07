@@ -1,11 +1,10 @@
 {
   "name": "vue-toastfic",
   "private": false,
-  "version": "0.1.4",
+  "version": "0.1.5",
   "type": "module",
   "files": [
-    "dist",
-    "src/components/"
+    "dist"
   ],
   "repository": {
     "type": "git",
@@ -16,6 +15,8 @@
   "keywords": [
     "vue3",
     "vue",
+    "nuxt3",
+    "nuxt",
     "vuejs",
     "toast",
     "toastify",

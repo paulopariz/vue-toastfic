@@ -1,12 +1,10 @@
 <script setup lang="ts">
+import { defineProps, inject } from "vue";
 import { Success, Error, Info, Warning } from "./icons";
-import { inject } from "vue";
 
 interface IToastIconProps {
   type: "success" | "error" | "info" | "warning";
 }
-
-type TTheme = "light" | "dark" | "pastel";
 
 const props = defineProps<IToastIconProps>();
 
@@ -18,23 +16,15 @@ const iconComponents = {
 };
 
 const isIconColor = inject<boolean>("isIconColor");
-const theme = inject<TTheme>("currentTheme");
 
 if (!isIconColor) {
   throw new Error("isIconColor not provided");
-}
-if (!theme) {
-  throw new Error("theme not provided");
 }
 </script>
 
 <template>
   <div>
-    <component
-      :is="iconComponents[props.type]"
-      class="icon"
-      :class="{ [`icon-${$props.type}`]: isIconColor || theme === 'pastel' }"
-    />
+    <component :is="iconComponents[props.type]" class="icon" :class="{ [`icon-${props.type}`]: isIconColor }" />
   </div>
 </template>
 

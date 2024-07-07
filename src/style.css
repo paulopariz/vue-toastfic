@@ -2,7 +2,7 @@ body {
   background-color: #111111;
 }
 
-/* .classe-toast {
+.classe-toast {
   background-color: #030712 !important;
   border-radius: 5px !important;
 }
@@ -34,20 +34,38 @@ body {
 }
 
 .classe-icon {
+  width: 22px !important;
+  height: 22px !important;
+
   display: flex;
-  height: 100%;
   align-items: center;
   justify-content: center;
+
+  margin: 0 !important;
+
+  border-radius: 999px !important;
+}
+
+.classe-icon svg {
+  margin: 0 !important;
 }
 
 .classe-icon-success {
+  background-color: #388e3c34 !important;
+  box-shadow: 0px 3px 20px 2px #388e3c34;
 }
 
 .classe-icon-error {
+  background-color: #d32f2f34 !important;
+  box-shadow: 0px 3px 20px 2px #d32f2f34;
 }
 
 .classe-icon-info {
+  background-color: #1976d234 !important;
+  box-shadow: 0px 3px 20px 2px #1976d234;
 }
 
 .classe-icon-warning {
-} */
+  background-color: #f57b0034 !important;
+  box-shadow: 0px 3px 20px 2px #f57b0034;
+}

@@ -2,7 +2,7 @@
 import { ToastTitle, ToastIcon, ToastAction, ToastDescription, ToastClose } from "./index";
 
 import { useToasts } from "./toast";
-import { IProps, IToastOptions } from "./props";
+import { IProps, IToastOptions, IToastType } from "./props";
 import { watchEffect, onBeforeUnmount, provide, ref, computed } from "vue";
 
 const { toasts, removeToast } = useToasts();
@@ -30,8 +30,8 @@ const props = withDefaults(
     colorful: true,
     maxToasts: 7,
     theme: "light",
-    classes: undefined,
     progressBar: true,
+    classes: undefined,
   }
 );
 
@@ -137,6 +137,18 @@ function limitText(text: string, maxLength: number) {
   return text;
 }
 
+//adiciona a classe no icon de acordo com o type
+function getIconClass(type: IToastType) {
+  if (props.classes?.icons && type) {
+    if (type === "success") return props.classes.icons.success;
+    if (type === "error") return props.classes.icons.error;
+    if (type === "info") return props.classes.icons.info;
+    if (type === "warning") return props.classes.icons.warning;
+  } else {
+    return props.classes?.icon || "";
+  }
+}
+
 watchEffect(() => {
   closeAutoToasts();
 });
@@ -146,7 +158,6 @@ onBeforeUnmount(() => {
 });
 
 provide("isIconColor", ref(props.colorful));
-provide("currentTheme", ref(props.theme));
 </script>
 
 <template>
@@ -168,7 +179,11 @@ provide("currentTheme", ref(props.theme));
     >
       <ToastClose v-if="props.close" :class="props.classes?.buttonClose" @click="removeToast(toast.id)" />
 
-      <ToastIcon v-if="toast.type !== 'default'" :class="props.classes?.icon" :type="toast.type" />
+      <ToastIcon
+        v-if="toast.type !== 'default'"
+        :class="[getIconClass(toast.type), props.classes?.icon]"
+        :type="toast.type"
+      />
 
       <section :style="{ justifyContent: !toast.description && !toast.handle?.click ? 'center' : 'space-between' }">
         <div>

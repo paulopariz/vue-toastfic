@@ -2,51 +2,40 @@
 import { Toast, useToast } from "./components/toast";
 
 function success() {
-  useToast.success("Cadastro realizado!", {
-    description: "Descrição do toast de Success",
+  useToast.success("Toast success!", {
+    description: "Description toast success",
   });
 }
 function error() {
-  useToast.error("Ocorreu um erro", {
-    description: "Lorem, ipsum dolor sit amet conseraaaaa aaaaaaaa aa aa a aaaaaaaaaa aa aaaa aaaaaaaaaaaaaaaaas",
-    duration: 6000,
+  useToast.error("Toast error!", {
+    description: "Description toast error",
   });
 }
 function info() {
-  useToast.info("Aguarde 1 minuto para atualizar o seu dados cadastrados", {
-    // handle: {
-    //   text: "Beleza",
-    //   click: () => console.log("w"),
-    // },
+  useToast.info("Toast info!", {
+    handle: {
+      text: "OK",
+      click: () => console.log("ok"),
+    },
   });
 }
 function warning() {
-  useToast.warning("Ultímas chances!", {
-    description: "Descrição do toast de Warning",
-    // handle: {
-    //   text: "OK",
-    //   click: () => console.log("e"),
-    // },
+  useToast.warning("Toast warning!", {
+    description: "Description toast warning",
+    handle: {
+      text: "Yes",
+      click: () => console.log("Yes"),
+    },
   });
 }
 
 function defaultT() {
-  useToast.default("Aguarde 1 minutoewqeqweqwsdfsdfsdf dwqdqwdwdqwdqwdqwdddddddddddddddddddddddddddw qwewe", {
-    description: "Descrição do toast de Warning",
-    // handle: {
-    //   text: "Beleza",
-    //   click: () => console.log("w"),
-    // },
-  });
+  useToast.default("Toast defaut!");
 }
 </script>
 
 <template>
   <div>
-    <a href="https://vitejs.dev" target="_blank">
-      <img src="/vite.svg" class="logo" alt="Vite logo" />
-    </a>
-
     <p style="color: aliceblue; cursor: pointer" @click="success">success</p>
     <br />
     <br />
@@ -63,12 +52,12 @@ function defaultT() {
   </div>
 
   <Toast
-    :duration="1000"
+    :duration="32500"
     position="top-right"
     :close="true"
-    :colorful="false"
+    :colorful="true"
     theme="dark"
-    :max-toasts="10"
+    :max-toasts="7"
     :progress-bar="true"
     :classes="{
       toast: 'classe-toast',

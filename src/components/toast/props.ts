@@ -7,7 +7,7 @@ export interface IProps {
   maxToasts?: number;
   theme?: "light" | "dark";
   progressBar?: boolean;
-  classes?: {
+  classes: {
     toast?: string;
     title?: string;
     description?: string;
