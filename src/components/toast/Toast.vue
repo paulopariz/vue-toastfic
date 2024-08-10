@@ -272,6 +272,7 @@ provide("isIconColor", ref(props.colorful));
   transition: all 0.5s ease;
 
   position: fixed;
+  z-index: 999;
   overflow: hidden;
 
   display: flex;
@@ -400,7 +401,7 @@ provide("isIconColor", ref(props.colorful));
 .toastfic-bottom-right-enter-from,
 .toastfic-bottom-right-leave-to {
   opacity: 0;
-  z-index: -1 !important;
+  z-index: 998 !important;
 }
 
 .toastfic-bottom-enter-to,

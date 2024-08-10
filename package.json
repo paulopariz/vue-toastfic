@@ -1,7 +1,7 @@
 {
   "name": "vue-toastfic",
   "private": false,
-  "version": "0.1.5",
+  "version": "0.1.7",
   "type": "module",
   "files": [
     "dist"
@@ -32,7 +32,8 @@
   "exports": {
     ".": {
       "import": "./dist/vue-toastfic.js",
-      "require": "./dist/vue-toastfic.umd.cjs"
+      "require": "./dist/vue-toastfic.umd.cjs",
+      "types": "./dist/index.d.ts"
     },
     "./style.css": "./dist/style.css"
   },
