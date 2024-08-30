@@ -138,15 +138,13 @@ function limitText(text: string, maxLength: number) {
 }
 
 //adiciona a classe no icon de acordo com o type
-function getIconClass(type: IToastType) {
-  if (props.classes?.icons && type) {
-    if (type === "success") return props.classes.icons.success;
-    if (type === "error") return props.classes.icons.error;
-    if (type === "info") return props.classes.icons.info;
-    if (type === "warning") return props.classes.icons.warning;
-  } else {
-    return props.classes?.icon || "";
-  }
+function getIconClass(type: IToastType): string {
+  return type === "default" ? props.classes?.icon ?? "" : props.classes?.icons?.[type] ?? props.classes?.icon ?? "";
+}
+
+//adiciona a classe no toast de acordo com o type
+function getToastClass(type: IToastType): string {
+  return props.classes?.toasts?.[type] ?? props.classes?.toast ?? "";
 }
 
 watchEffect(() => {
@@ -169,6 +167,7 @@ provide("isIconColor", ref(props.colorful));
         `toastfic-position-${props.position}`,
         props.classes?.toast,
         { 'toastfic-description': toast.description },
+        [getToastClass(toast.type), props.classes?.toast],
       ]"
       :style="[
         getToastStyle(index, toast),
@@ -300,12 +299,12 @@ provide("isIconColor", ref(props.colorful));
 
   position: absolute;
   bottom: 0;
-  left: 0;
+  right: 0;
 
   border-radius: 5px;
   background-color: var(--toastfic-success-icon);
 
-  height: 3px;
+  height: 2.2px;
 }
 
 .toastfic.toastfic-position-top-right {

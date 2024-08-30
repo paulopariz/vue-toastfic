@@ -5,6 +5,23 @@ body {
 .classe-toast {
   background-color: #030712 !important;
   border-radius: 5px !important;
+  border-left: 4px solid #141824;
+}
+
+.classe-toast-success {
+  border-left-color: #388e3c34;
+}
+
+.classe-toast-error {
+  border-left-color: #d32f2f34;
+}
+
+.classe-toast-info {
+  border-left-color: #1976d234;
+}
+
+.classe-toast-warning {
+  border-left-color: #f57b0034;
 }
 
 .classe-title {

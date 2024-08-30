@@ -9,6 +9,13 @@ export interface IProps {
   progressBar?: boolean;
   classes: {
     toast?: string;
+    toasts?: {
+      success?: string;
+      error?: string;
+      info?: string;
+      warning?: string;
+      default?: string;
+    };
     title?: string;
     description?: string;
     buttonHandle?: string;

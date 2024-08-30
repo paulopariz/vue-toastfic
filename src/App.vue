@@ -52,7 +52,7 @@ function defaultT() {
   </div>
 
   <Toast
-    :duration="32500"
+    :duration="6500"
     position="top-right"
     :close="true"
     :colorful="true"
@@ -60,11 +60,18 @@ function defaultT() {
     :max-toasts="7"
     :progress-bar="true"
     :classes="{
-      toast: 'classe-toast',
       title: 'classe-title',
       description: 'classe-description',
       buttonHandle: 'classe-handle',
       buttonClose: 'classe-close',
+      toast: 'classe-toast',
+      toasts: {
+        success: 'classe-toast-success',
+        error: 'classe-toast-error',
+        info: 'classe-toast-info',
+        warning: 'classe-toast-warning',
+        default: 'classe-toast-default',
+      },
       icon: 'classe-icon',
       icons: {
         success: 'classe-icon-success',
