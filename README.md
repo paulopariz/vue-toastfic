@@ -16,13 +16,13 @@ Before installing **vue-toastfic**, ensure you have the following installed in y
 Install **vue-toastfic** using your preferred package manager:
 
 ```bash
-npm install maska
+npm install vue-toastfic
 #or
-yarn add maska
+yarn add vue-toastfic
 #or
-pnpm install maska
+pnpm install vue-toastfic
 #or
-bun add maska
+bun add vue-toastfic
 ```
 
 ---
